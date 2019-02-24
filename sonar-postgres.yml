@@ -1,0 +1,40 @@
+# sonar with postgres
+# author: igorferreirabr@gmail.com
+
+version: "3"
+
+services:
+  sonarqube-postgres:
+    depends_on:
+      - db-postgres
+    image: sonarqube:latest
+    restart: always
+    ports:
+      - "9101:9000"
+      - "9193:9092"
+    networks:
+      - sonarlocal-postgres
+    environment:
+      SONARQUBE_JDBC_USERNAME: sonar
+      SONARQUBE_JDBC_PASSWORD: P1b7JBvP8II4
+      SONARQUBE_JDBC_URL: jdbc:postgresql://db-postgres:5432/sonar
+#    volumes:
+#      - /opt/sonarqube/data-sonar-postgres:/opt/sonarqube/data
+  db-postgres:
+    image: postgres:10.4
+    restart: always
+    ports:
+      - "5433:5432"
+    networks:
+      - sonarlocal-postgres
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: P1b7JBvP8II4
+      POSTGRES_DB: sonar
+    volumes:
+      - /opt/sonarqube-postgres/db/sql:/var/lib/postgresql
+networks:
+  sonarlocal-postgres:
+    external: true
+#     This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
+#     - /opt/sonarqube-postgres/db/data:/var/lib/postgresql/data

@@ -1,0 +1,40 @@
+# sonar with mysql
+# author: igorferreirabr@gmail.com
+
+version: "3"
+
+services:
+  sonarqube-mysql:
+    depends_on:
+      - db-mysql
+    image: sonarqube:latest
+    restart: always
+    ports:
+      - "9100:9000"
+      - "9192:9092"
+    networks:
+      - sonarlocal-mysql
+    environment:
+      SONARQUBE_JDBC_USERNAME: sonar
+      SONARQUBE_JDBC_PASSWORD: P1b7JBvP8II4
+      SONARQUBE_JDBC_URL: jdbc:mysql://db-mysql:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&allowPublicKeyRetrieval=true&useSSL=false&test=3
+#    volumes:
+#      - /opt/sonarqube-mysql/data:/opt/sonarqube/data
+  db-mysql:
+    image: mysql:5.7.20
+    restart: always
+    ports:
+      - 3307:3306
+    networks:
+      - sonarlocal-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: P1b7JBvP8II4
+      MYSQL_DATABASE: sonar
+      MYSQL_USER: sonar
+      MYSQL_PASSWORD: P1b7JBvP8II4
+    volumes:
+      - /opt/sonarqube-mysql/db:/var/lib/mysql
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8 --explicit_defaults_for_timestamp
+networks:
+  sonarlocal-mysql:
+    external: true
