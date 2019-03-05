@@ -1,0 +1,25 @@
+1 - baixe o SonarQube na versão 7.1. Segue o link https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-7.1.zip
+
+2 - descompacte o .zip e execute o arquivo "StartSonar.bat" encontrado no caminho "..\sonarqube-7.1\bin\". Note que possui versão para 32 e 64 bits. 
+Após executar o arquivo o serviço subirá na URL padrão "http://localhost:9000" com usuário e senha "admin".
+
+3 - instalar os plugins "Checkstyle", "Findbugs", "Git", "PMD", "SonarWeb" e "Xanitizer". O caminho para instalação é: http://localhost:9000/admin/marketplace.
+
+4 - vá em "Quality Profile" pelo link http://localhost:9000/profiles. No item "Java" crie uma cópia dos quality profiles "FindBugs", "FindBugs Security Audit", "FindBugs Security Minimal", "FindBugs + FB-Contrib" e "Sonar way".
+Nessa ordem entre em cada cópia do quality profile e defina seu parent. Ex.: entre no quality profile "FindBugs" e defina o seu parent como "FindBugs Security Audit". Após isso entre no 
+"FindBugs Security Audit" e defina seu parent como "FindBugs Security Minimal". Faça isso para os demais quality profiles seguindo a ordem informada acima.
+
+5 - no Eclipse, vá em Help -> Install New Software. Clique em "Add... -> Archive..." e escolha "sonar-eclipse.zip"(arquivo em anexo). 
+Marque as opções "SonarQube Java" e "SonarQube optional connectors". Só seguir o procedimento de instalação.
+
+6 - em Window -> Show View -> Other, selecione "SonarQube Servers". Com o botão direito na aba escolha a opção "New -> Server connection". Na tela apresentada escolha "SonarQube" e clique em "Next".
+
+7 - No campo URL coloque "http://localhost:9000". 
+
+8 - Na próxima tela escolha "Username + Passowrd". 
+
+9 - Na próxima tela defina os dois campos com "admin" e siga o procedimento de instalação.
+
+10 - execute o comando maven "verify sonar:sonar -Dsonar.sourceEncoding=UTF-8 -Dsonar.java.source=1.8 -D-Dsonar.java.target=1.8" no pom.xml do projeto.
+
+Após esses passos seu projeto estará disponível no seu Sonar local.
